@@ -53,19 +53,46 @@ public class LibraryTest {
         assertFalse(library.hasBook(new Book("The Dispossessed", "Ursula K Le Guin", 2000)));
     }
 
-   // @Test
-   // public void testBookIsAvailable() {
-   //     Library library = new Library();
-   //     Book book = new Book("The Dispossessed", "Ursula K Le Guin", 1974);
-   //     library.add(book);
-   //     assertTrue(library.isAvailable(book));
-   // }
-   // @Test
-   // public void testCheckout() {
-   //     Library library = new Library();
-   //     Book book = new Book("The Dispossessed", "Ursula K Le Guin", 1974);
-   //     library.add(book);
-   //     library.checkout(book);
-   //     assertEquals(true, library.isAvailable(book));
-   // }
+    @Test
+    public void testBookIsAvailable() {
+        Library library = new Library();
+        Book book = new Book("The Dispossessed", "Ursula K Le Guin", 1974);
+        library.add(book);
+        assertTrue(library.isAvailable(book));
+    }
+
+    @Test
+    public void testFakeBookIsNotAvailable() {
+        Library library = new Library();
+        Book book = new Book("The Dispossessed", "Ursula K Le Guin", 1974);
+        library.add(book);
+        book = new Book("The Call of Cthulhu", "HP Lovecraft", 1926);
+        assertFalse(library.isAvailable(book));
+    }
+
+    @Test
+    public void testSuccessfulCheckout() {
+        Library library = new Library();
+        Book book = new Book("The Dispossessed", "Ursula K Le Guin", 1974);
+        library.add(book);
+        assertTrue(library.checkout(book));
+    }
+
+    @Test
+    public void testUnsuccessfulCheckoutOfFakeBook() {
+        Library library = new Library();
+        Book book = new Book("The Dispossessed", "Ursula K Le Guin", 1974);
+        library.add(book);
+        book = new Book("The Call of Cthulhu", "HP Lovecraft", 1926);
+        assertFalse(library.checkout(book));
+    }
+
+    @Test
+    public void testUnsuccessfulCheckoutOfAlreadyCheckedout() {
+        Library library = new Library();
+        Book book = new Book("The Dispossessed", "Ursula K Le Guin", 1974);
+        library.add(book);
+        library.checkout(book);
+        assertFalse(library.checkout(book));
+    }
 }

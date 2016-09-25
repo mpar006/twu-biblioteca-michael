@@ -1,17 +1,17 @@
 package com.twu.biblioteca;
 
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
+import java.util.*;
 
 /**
  * Created by root on 25/09/16.
  */
 public class Library {
-    private List<Book> inventory = new ArrayList<Book>();
+    // The value corresponding to a particular key (book) is it's availability
+    // LinkedHashMap is used to preserve iteration order
+    private Map<Book, Boolean> inventory = new LinkedHashMap<Book, Boolean>();
 
-    public boolean add(Book book) {
-        return inventory.add(book);
+    public void add(Book book) {
+        inventory.put(book, true);
     }
 
     public int size() {
@@ -20,9 +20,10 @@ public class Library {
 
     public String print() {
         String inventoryList = "";
-        Iterator<Book> inventoryIterator = inventory.iterator();
+        Iterator<Map.Entry<Book, Boolean>> inventoryIterator = inventory.entrySet().iterator();
         for(int i = 0; i < inventory.size(); i++){
-            Book b = inventoryIterator.next();
+            Map.Entry<Book, Boolean> tmp = inventoryIterator.next();
+            Book b = tmp.getKey();
             inventoryList += b.getTitle() + "," + b.getAuthor() + "," + b.getYear();
             if(inventoryIterator.hasNext()) {
                 inventoryList += "\n";
@@ -32,10 +33,21 @@ public class Library {
     }
 
     public boolean hasBook(Book book) {
-        return inventory.contains(book);
+        return inventory.containsKey(book);
     }
 
     public boolean isAvailable(Book book) {
-        return true;
+        if(inventory.containsKey(book)) {
+            return inventory.get(book);
+        }
+        return false;
+    }
+
+    public boolean checkout(Book book) {
+        if(inventory.containsKey(book) && inventory.get(book) == true) {
+            inventory.put(book, false);
+            return true;
+        }
+        return false;
     }
 }
