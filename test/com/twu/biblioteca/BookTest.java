@@ -7,6 +7,7 @@ import org.junit.Test;
 import java.util.prefs.AbstractPreferences;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotEquals;
 
 public class BookTest {
     private Book book;
@@ -18,16 +19,26 @@ public class BookTest {
 
     @Test
     public void testBookName() {
-        assertEquals("The Dispossessed", book.name());
+        assertEquals("The Dispossessed", book.getTitle());
     }
 
     @Test
     public void testBookAuthor() {
-        assertEquals("Ursula K Le Guin", book.author());
+        assertEquals("Ursula K Le Guin", book.getAuthor());
     }
 
     @Test
     public void testBookYear() {
-        assertEquals(1974, book.year());
+        assertEquals(1974, book.getYear());
+    }
+
+    @Test
+    public void testEqual() {
+        assertEquals(new Book("The Dispossessed", "Ursula K Le Guin", 1974), book);
+    }
+
+    @Test
+    public void testNotEqual() {
+        assertNotEquals(new Book("The Dispossessed", "Ursula K Le Guin", 2000), book);
     }
 }

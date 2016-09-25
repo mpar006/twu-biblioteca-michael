@@ -14,15 +14,24 @@ public class Book {
         this.year = year;
     }
 
-    String name() {
+    public String getTitle() {
         return title;
     }
 
-    String author() {
+    public String getAuthor() {
         return author;
     }
 
-    int year() {
+    public int getYear() {
         return year;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        Book other = (Book) obj;
+        if(other.getAuthor() == author && other.getTitle() == title && other.getYear() == year) {
+            return true;
+        }
+        return false;
     }
 }
