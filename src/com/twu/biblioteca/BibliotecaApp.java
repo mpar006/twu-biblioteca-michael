@@ -3,8 +3,7 @@ package com.twu.biblioteca;
 public class BibliotecaApp {
 
     public static void main(String[] args) {
-        System.out.println("Welcome to Biblioteca");
-        Library library = new Library();
-        library.start();
+        Biblioteca b = new Biblioteca(new MockLibrary());
+        b.start();
     }
 }
