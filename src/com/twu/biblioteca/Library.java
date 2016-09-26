@@ -20,13 +20,10 @@ public class Library {
 
     public String print() {
         String inventoryList = "";
-        Iterator<Map.Entry<Book, Boolean>> inventoryIterator = inventory.entrySet().iterator();
-        for(int i = 0; i < inventory.size(); i++){
-            Map.Entry<Book, Boolean> tmp = inventoryIterator.next();
-            Book b = tmp.getKey();
-            inventoryList += b.getTitle() + "," + b.getAuthor() + "," + b.getYear();
-            if(inventoryIterator.hasNext()) {
-                inventoryList += "\n";
+        for(Map.Entry<Book, Boolean> entry : inventory.entrySet()) {
+            if(entry.getValue() == true) {
+                Book b = entry.getKey();
+                inventoryList += b.getTitle() + "," + b.getAuthor() + "," + b.getYear() + "\n";
             }
         }
         return inventoryList;
@@ -49,5 +46,49 @@ public class Library {
             return true;
         }
         return false;
+    }
+
+    public boolean returnBook(Book book) {
+        if(inventory.containsKey(book) && inventory.get(book) == false) {
+            inventory.put(book, true);
+            return true;
+        }
+        return false;
+    }
+
+    public void start() {
+        this.add(new Book("The Dispossessed", "Ursula K Le Guin", 1974));
+        this.add(new Book("The Call of Cthulhu", "HP Lovecraft", 1926));
+        Scanner scanner = new Scanner(System.in);
+        scanner.useDelimiter(System.getProperty("line.separator"));
+        String cmd;
+        while(scanner.hasNext()) {
+            cmd = scanner.next();
+            if(cmd.contains("List")) {
+                System.out.print(this.print());
+            } else if(cmd.contains("Checkout")) {
+                Book book = getBookFromCmd(cmd);
+                if (this.checkout(book)) {
+                    System.out.println("Thank you! Enjoy the book");
+                } else {
+                    System.out.println("That book is not available");
+                }
+            } else if(cmd.contains("Return")) {
+                Book book = getBookFromCmd(cmd);
+                if (this.returnBook(book)) {
+                    System.out.println("Thank you for returning the book");
+                } else {
+                    System.out.println("That is not a valid book for return");
+                }
+            } else if(cmd.contains("Quit")) {
+                break;
+            } else {
+                System.out.println("Select a valid option!");
+            }
+        }
+    }
+
+    private Book getBookFromCmd(String cmd) {
+        return (new Book("The Call of Cthulhu", "HP Lovecraft", 1926));
     }
 }

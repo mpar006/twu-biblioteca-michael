@@ -33,7 +33,7 @@ public class LibraryTest {
         library.add(book);
         book = new Book("Perdido Street Station", "China Mieville", 2000);
         library.add(book);
-        assertEquals("The Dispossessed,Ursula K Le Guin,1974\nPerdido Street Station,China Mieville,2000",
+        assertEquals("The Dispossessed,Ursula K Le Guin,1974\nPerdido Street Station,China Mieville,2000\n",
                 library.print());
     }
 
@@ -94,5 +94,42 @@ public class LibraryTest {
         library.add(book);
         library.checkout(book);
         assertFalse(library.checkout(book));
+    }
+
+    @Test
+    public void testSuccessfulReturn(){
+        Library library = new Library();
+        Book book = new Book("The Dispossessed", "Ursula K Le Guin", 1974);
+        library.add(book);
+        library.checkout(book);
+        assertTrue(library.returnBook(book));
+    }
+
+    @Test
+    public void testUnsuccessfulReturnAvailableBook() {
+        Library library = new Library();
+        Book book = new Book("The Dispossessed", "Ursula K Le Guin", 1974);
+        library.add(book);
+        assertFalse(library.returnBook(book));
+    }
+
+    @Test
+    public void testUnsuccessfulReturnFakeBook() {
+        Library library = new Library();
+        Book book = new Book("The Dispossessed", "Ursula K Le Guin", 1974);
+        library.add(book);
+        book = new Book("The Call of Cthulhu", "HP Lovecraft", 1926);
+        assertFalse(library.returnBook(book));
+    }
+
+    @Test
+    public void testListOnlyAvailableBooks() {
+        Library library = new Library();
+        Book book = new Book("The Dispossessed", "Ursula K Le Guin", 1974);
+        library.add(book);
+        book = new Book("Perdido Street Station", "China Mieville", 2000);
+        library.add(book);
+        library.checkout(book);
+        assertEquals("The Dispossessed,Ursula K Le Guin,1974\n", library.print());
     }
 }

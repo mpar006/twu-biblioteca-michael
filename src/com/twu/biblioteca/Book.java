@@ -34,4 +34,9 @@ public class Book {
         }
         return false;
     }
+
+    @Override
+    public int hashCode() {
+        return 0;
+    }
 }
