@@ -17,6 +17,9 @@ public class BibliotecaTest {
     private ByteArrayOutputStream outContent = new ByteArrayOutputStream();
     Biblioteca b;
     Library l;
+    String expectedBookList = "The Dispossessed,Ursula K Le Guin,1974\n" +
+            "Perdido Street Station,China Mieville,2000\n" +
+            "The Call of Cthulhu,HP Lovecraft,1926\n";
 
     @Before
     public void setUp() {
@@ -38,16 +41,14 @@ public class BibliotecaTest {
     @Test
     public void testBookDetails() {
         b.list();
-        assertEquals("The Dispossessed,Ursula K Le Guin,1974\n" +
-                "Perdido Street Station,China Mieville,2000\n", outContent.toString());
+        assertEquals(expectedBookList, outContent.toString());
     }
 
     @Test
     public void testListOption() {
         System.setIn(new ByteArrayInputStream("List Books".getBytes()));
         b.processCmds();
-        assertEquals("The Dispossessed,Ursula K Le Guin,1974\n" +
-                "Perdido Street Station,China Mieville,2000\n", outContent.toString());
+        assertEquals(expectedBookList, outContent.toString());
     }
 
     @Test
@@ -68,7 +69,8 @@ public class BibliotecaTest {
     public void testCheckoutBook() {
         b.checkoutBook("The Dispossessed");
         b.list();
-        assertEquals("Perdido Street Station,China Mieville,2000\n", outContent.toString ());
+        assertEquals("Perdido Street Station,China Mieville,2000\n" +
+                "The Call of Cthulhu,HP Lovecraft,1926\n", outContent.toString ());
     }
 
     @Test
@@ -94,27 +96,21 @@ public class BibliotecaTest {
     public void testReturnBook() {
         b.returnBook("The Dispossessed");
         b.list();
-        assertEquals("The Dispossessed,Ursula K Le Guin,1974\n" +
-                "Perdido Street Station,China Mieville,2000\n", outContent.toString());
+        assertEquals(expectedBookList, outContent.toString());
     }
 
     @Test
     public void testSuccessfulReturnBook() {
+        System.setIn(new ByteArrayInputStream("Checkout The Dispossessed".getBytes()));
+        b.processCmds();
         System.setIn(new ByteArrayInputStream("Return The Dispossessed".getBytes()));
         b.processCmds();
-        assertEquals("Thank you for returning the book\n", outContent.toString());
+        assertEquals("Thank you! Enjoy the book\nThank you for returning the book\n", outContent.toString());
     }
 
     @Test
     public void testGetReturnTitle() {
         assertEquals(b.getReturnTitle("Return The Dispossessed"), "The Dispossessed");
-    }
-
-    @Test
-    public void testSuccessfulReturn() {
-        System.setIn(new ByteArrayInputStream("Return The Dispossessed".getBytes()));
-        b.processCmds();
-        assertEquals("Thank you for returning the book\n", outContent.toString());
     }
 
     @Test

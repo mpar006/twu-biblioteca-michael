@@ -59,11 +59,11 @@ public class Biblioteca {
         }
     }
 
-    protected String getReturnTitle(String cmd) {
+    String getReturnTitle(String cmd) {
         return cmd.substring("Return ".length());
     }
 
-    protected String getCheckoutTitle(String cmd) {
+    String getCheckoutTitle(String cmd) {
         return cmd.substring("Checkout ".length());
     }
 
