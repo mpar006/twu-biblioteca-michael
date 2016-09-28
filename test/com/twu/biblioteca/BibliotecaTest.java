@@ -75,6 +75,7 @@ public class BibliotecaTest {
 
     @Test
     public void testCheckoutBook() {
+        b.login("111-1111", "pass");
         b.checkoutBook("The Dispossessed");
         b.listBooks();
         assertEquals("Perdido Street Station,China Mieville,2000\n" +
@@ -83,7 +84,10 @@ public class BibliotecaTest {
 
     @Test
     public void testCheckoutMovie() {
-
+        b.login("111-1111", "pass");
+        b.checkoutMovie("Sweeney Todd");
+        b.listMovies();
+        assertEquals("Pulp Fiction,1994,Quentin Tarantino,9\n", outContent.toString());
     }
 
     @Test
@@ -92,17 +96,35 @@ public class BibliotecaTest {
     }
 
     @Test
-    public void testSuccessfulCheckout() {
-        System.setIn(new ByteArrayInputStream("Checkout The Dispossessed".getBytes()));
+    public void testSuccessfulBookCheckout() {
+        System.setIn(new ByteArrayInputStream("Login 111-1111 pass".getBytes()));
         b.processCmds();
-        assertEquals("Thank you! Enjoy\n", outContent.toString());
+        System.setIn(new ByteArrayInputStream("Checkout book The Dispossessed".getBytes()));
+        b.processCmds();
+        assertEquals("Login successful\nThank you! Enjoy\n", outContent.toString());
     }
 
     @Test
     public void testUnsuccessfulCheckout() {
-        System.setIn(new ByteArrayInputStream("Checkout fake book".getBytes()));
+        System.setIn(new ByteArrayInputStream("Checkout book fake book".getBytes()));
         b.processCmds();
         assertEquals("That book is not available\n", outContent.toString());
+    }
+
+    @Test
+    public void testSuccessfulMovieCheckout() {
+        System.setIn(new ByteArrayInputStream("Login 111-1111 pass".getBytes()));
+        b.processCmds();
+        System.setIn(new ByteArrayInputStream("Checkout movie Sweeney Todd".getBytes()));
+        b.processCmds();
+        assertEquals("Login successful\nThank you! Enjoy\n", outContent.toString());
+    }
+
+    @Test
+    public void testUnsuccessfulMovieCheckout() {
+        System.setIn(new ByteArrayInputStream("Checkout movie Sweeney Todd".getBytes()));
+        b.processCmds();
+        assertEquals("That movie is not available\n", outContent.toString());
     }
 
     @Test
@@ -114,11 +136,13 @@ public class BibliotecaTest {
 
     @Test
     public void testSuccessfulReturnBook() {
-        System.setIn(new ByteArrayInputStream("Checkout The Dispossessed".getBytes()));
+        System.setIn(new ByteArrayInputStream("Login 111-1111 pass".getBytes()));
+        b.processCmds();
+        System.setIn(new ByteArrayInputStream("Checkout book The Dispossessed".getBytes()));
         b.processCmds();
         System.setIn(new ByteArrayInputStream("Return The Dispossessed".getBytes()));
         b.processCmds();
-        assertEquals("Thank you! Enjoy\nThank you for returning the book\n", outContent.toString());
+        assertEquals("Login successful\nThank you! Enjoy\nThank you for returning the book\n", outContent.toString());
     }
 
     @Test
@@ -131,5 +155,12 @@ public class BibliotecaTest {
         System.setIn(new ByteArrayInputStream("Return fake book".getBytes()));
         b.processCmds();
         assertEquals("That is not a valid book to return\n", outContent.toString());
+    }
+
+    @Test
+    public void testSuccessfulUserLogin() {
+        System.setIn(new ByteArrayInputStream("Login 111-1111 pass".getBytes()));
+        b.processCmds();
+        assertEquals("Login successful\n", outContent.toString());
     }
 }

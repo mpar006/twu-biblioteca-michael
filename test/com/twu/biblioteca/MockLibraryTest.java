@@ -31,36 +31,8 @@ public class MockLibraryTest {
     }
 
     @Test
-    public void testCheckoutBook() {
-        assertTrue(l.checkout("The Dispossessed"));
-    }
-
-    @Test
-    public void testCheckoutMovie() {
-        assertTrue(l.checkout("Sweeney Todd"));
-    }
-
-    @Test
-    public void testCheckoutFakeItem() {
-        assertFalse(l.checkout("foo"));
-    }
-
-    @Test
-    public void testListBooksAfterCheckout() {
-        String expected = "The Dispossessed,Ursula K Le Guin,1974\n" +
-                "Perdido Street Station,China Mieville,2000";
-        l.checkout("The Call of Cthulhu");
-        assertEquals(expected, l.list("book"));
-    }
-
-    @Test
-    public void testListBooksAfterCheckoutThenReturn() {
-        String expected = "The Dispossessed,Ursula K Le Guin,1974\n" +
-                "Perdido Street Station,China Mieville,2000\n" +
-                "The Call of Cthulhu,HP Lovecraft,1926";
-        l.checkout("The Call of Cthulhu");
-        l.returnBook("The Call of Cthulhu");
-        assertEquals(expected, l.list("book"));
+    public void testCheckoutBookNoLogin() {
+        assertFalse(l.checkout("The Dispossessed"));
     }
 
     @Test
@@ -89,5 +61,42 @@ public class MockLibraryTest {
     public void testSuccessfulUserPrintDetails() {
         l.login("111-1111", "pass");
         assertEquals("Yvan,ymartin@thoughtworks.com,0434567524", l.printDetails());
+    }
+
+    @Test
+    public void testCheckoutBook() {
+        l.login("111-1111", "pass");
+        assertTrue(l.checkout("The Dispossessed"));
+    }
+
+    @Test
+    public void testCheckoutMovie() {
+        l.login("111-1111", "pass");
+        assertTrue(l.checkout("Sweeney Todd"));
+    }
+
+    @Test
+    public void testCheckoutFakeItem() {
+        assertFalse(l.checkout("foo"));
+    }
+
+    @Test
+    public void testListBooksAfterCheckout() {
+        l.login("111-1111", "pass");
+        String expected = "The Dispossessed,Ursula K Le Guin,1974\n" +
+                "Perdido Street Station,China Mieville,2000";
+        l.checkout("The Call of Cthulhu");
+        assertEquals(expected, l.list("book"));
+    }
+
+    @Test
+    public void testListBooksAfterCheckoutThenReturn() {
+        l.login("111-1111", "pass");
+        String expected = "The Dispossessed,Ursula K Le Guin,1974\n" +
+                "Perdido Street Station,China Mieville,2000\n" +
+                "The Call of Cthulhu,HP Lovecraft,1926";
+        l.checkout("The Call of Cthulhu");
+        l.returnBook("The Call of Cthulhu");
+        assertEquals(expected, l.list("book"));
     }
 }

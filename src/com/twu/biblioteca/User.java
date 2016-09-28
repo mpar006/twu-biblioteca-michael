@@ -38,7 +38,7 @@ public class User {
     @Override
     public boolean equals(Object obj) {
         User other = (User) obj;
-        if(other.getLogin() == login && other.getPassword() == password) {
+        if(other.getLogin().equals(login) && other.getPassword().equals(password)) {
             return true;
         }
         return false;
@@ -51,5 +51,17 @@ public class User {
 
     public String showDetails() {
         return name + "," + email + "," + phone;
+    }
+
+    public void borrow(LibraryItem item) {
+        borrowedItems.add(item);
+    }
+
+    public String showBorrowedTitles() {
+        String list = "";
+        for(LibraryItem item : borrowedItems) {
+            list += item.getTitle() + "\n";
+        }
+        return list.trim();
     }
 }

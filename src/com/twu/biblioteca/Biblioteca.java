@@ -32,10 +32,14 @@ public class Biblioteca {
                 listBooks();
             } else if(cmd.contains("List Movies")) {
                 listMovies();
-            } else if(cmd.contains("Checkout")) {
-                processCheckout(cmd);
+            } else if(cmd.contains("Checkout book")) {
+                processBookCheckout(cmd);
+            } else if(cmd.contains("Checkout movie")) {
+                processMovieCheckout(cmd);
             } else if(cmd.contains("Return")) {
                 processReturn(cmd);
+            } else if(cmd.contains("Login")) {
+                processLogin(cmd);
             } else if(cmd.contains("Quit")) {
                 System.out.println("Goodbye!");
                 break;
@@ -45,11 +49,32 @@ public class Biblioteca {
         }
     }
 
-    private void processCheckout(String cmd) {
-        if(checkoutBook(getCheckoutTitle(cmd))) {
+    void processLogin(String cmd) {
+        String[] args = cmd.split(" ");
+        if(login(args[1], args[2])) {
+            System.out.println("Login successful");
+        } else {
+            System.out.println("Login failure");
+        }
+    }
+
+    boolean login(String id, String password) {
+        return l.login(id, password);
+    }
+
+    private void processBookCheckout(String cmd) {
+        if(checkoutBook(getSecondCmdArg(cmd, "Checkout book "))) {
             System.out.println("Thank you! Enjoy");
         } else {
             System.out.println("That book is not available");
+        }
+    }
+
+    private void processMovieCheckout(String cmd) {
+        if(checkoutBook(getSecondCmdArg(cmd, "Checkout movie "))) {
+            System.out.println("Thank you! Enjoy");
+        } else {
+            System.out.println("That movie is not available");
         }
     }
 
@@ -59,6 +84,10 @@ public class Biblioteca {
         } else {
             System.out.println("That is not a valid book to return");
         }
+    }
+
+    String getSecondCmdArg(String cmd, String firstArg) {
+        return cmd.substring(firstArg.length());
     }
 
     String getReturnTitle(String cmd) {
@@ -78,6 +107,10 @@ public class Biblioteca {
     }
 
     boolean checkoutBook(String title) {
+        return l.checkout(title);
+    }
+
+    boolean checkoutMovie(String title) {
         return l.checkout(title);
     }
 

@@ -55,7 +55,10 @@ public class MockLibrary implements Library {
 
     @Override
     public boolean checkout(String title) {
-        return (checkout(bookInventory, title) || checkout(movieInventory, title));
+        if(isLoggedIn()) {
+            return (checkout(bookInventory, title) || checkout(movieInventory, title));
+        }
+        return false;
     }
 
     @Override
@@ -69,6 +72,7 @@ public class MockLibrary implements Library {
     }
 
     @Override
+    //Only a single user should be able to log in at once
     public boolean login(String id, String pass) {
         if(loggedIn == null) {
             for (User user : userList) {
@@ -77,6 +81,7 @@ public class MockLibrary implements Library {
                     return true;
                 }
             }
+            System.out.println("i'm here");
         }
         return false;
     }

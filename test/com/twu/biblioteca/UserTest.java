@@ -26,4 +26,10 @@ public class UserTest {
     public void testNotEquals() {
         assertNotEquals(user, new User("111-1111", "pass", "Michael", "mparker@thoughtworks.com", "0429135190"));
     }
+
+    @Test
+    public void testBorrow() {
+        user.borrow(new Book("The Dispossessed", "Ursula K Le Guin", 1974));
+        assertEquals(user.showBorrowedTitles(), "The Dispossessed");
+    }
 }
