@@ -9,22 +9,35 @@ import java.util.Map;
 public class MockLibrary implements Library {
     // The boolean value corresponding to a particular key (book) is it's availability
     // LinkedHashMap is used to preserve iteration order
-    private Map<Book, Boolean> inventory;
+    private Map<LibraryItem, Boolean> bookInventory;
+    private Map<LibraryItem, Boolean> movieInventory;
 
     public MockLibrary() {
-        inventory = new LinkedHashMap<Book, Boolean>();
-        inventory.put(new Book("The Dispossessed", "Ursula K Le Guin", 1974), true);
-        inventory.put(new Book("Perdido Street Station", "China Mieville", 2000), true);
-        inventory.put(new Book("The Call of Cthulhu", "HP Lovecraft", 1926), true);
+        bookInventory = new LinkedHashMap<LibraryItem, Boolean>();
+        bookInventory.put(new Book("The Dispossessed", "Ursula K Le Guin", 1974), true);
+        bookInventory.put(new Book("Perdido Street Station", "China Mieville", 2000), true);
+        bookInventory.put(new Book("The Call of Cthulhu", "HP Lovecraft", 1926), true);
+
+        movieInventory = new LinkedHashMap<LibraryItem, Boolean>();
+        movieInventory.put(new Movie("Sweeney Todd", 2007, "Tim Burton", 7), true);
+        movieInventory.put(new Movie("Pulp Fiction", 1994, "Quentin Tarantino", 9), true);
     }
 
-    @Override
-    public String listBooks() {
+    public String list(String itemType) {
+        String list = "";
+        if(itemType == "book") {
+            list = listItems(bookInventory);
+        } else if(itemType == "movie") {
+            list = listItems(movieInventory);
+        }
+        return list;
+    }
+
+    private String listItems(Map<LibraryItem, Boolean> inventory) {
         String inventoryList = "";
-        for(Map.Entry<Book, Boolean> entry : inventory.entrySet()) {
+        for(Map.Entry<LibraryItem, Boolean> entry : inventory.entrySet()) {
             if(entry.getValue() == true) {
-                Book b = entry.getKey();
-                inventoryList += b.getTitle() + "," + b.getAuthor() + "," + b.getYear() + "\n";
+                inventoryList += entry.getKey().details();
             }
         }
         return inventoryList.trim();
@@ -32,30 +45,35 @@ public class MockLibrary implements Library {
 
     @Override
     public boolean checkout(String title) {
-        Book b = getBookFromTitle(title);
-        if(inventory.containsKey(b) && inventory.get(b) == true) {
-            inventory.put(b, false);
-            return true;
-        }
-        return false;
+        return (checkout(bookInventory, title) || checkout(movieInventory, title));
     }
 
     @Override
     public boolean returnBook(String title) {
-        Book b = getBookFromTitle(title);
-        if(inventory.containsKey(b) && inventory.get(b) == false) {
-            inventory.put(b, true);
+        LibraryItem b = getLibraryItemFromTitle(title);
+        if(bookInventory.containsKey(b) && bookInventory.get(b) == false) {
+            bookInventory.put(b, true);
             return true;
         }
         return false;
     }
 
-    Book getBookFromTitle(String title) {
-        for(Map.Entry<Book, Boolean> entry : inventory.entrySet()) {
+    LibraryItem getLibraryItemFromTitle(String title) {
+        for(Map.Entry<LibraryItem, Boolean> entry : bookInventory.entrySet()) {
             if(entry.getKey().getTitle().equals(title)) {
                 return entry.getKey();
             }
         }
         return null;
+    }
+
+    private boolean checkout(Map<LibraryItem, Boolean> inventory, String title) {
+        for(Map.Entry<LibraryItem, Boolean> entry : inventory.entrySet()) {
+            if(entry.getKey().getTitle().equals(title)) {
+                inventory.put(entry.getKey(), false);
+                return true;
+            }
+        }
+        return false;
     }
 }

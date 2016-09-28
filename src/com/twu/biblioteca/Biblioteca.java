@@ -29,7 +29,9 @@ public class Biblioteca {
         while(scanner.hasNext()) {
             cmd = scanner.next();
             if(cmd.contains("List Books")) {
-                list();
+                listBooks();
+            } else if(cmd.contains("List Movies")) {
+                listMovies();
             } else if(cmd.contains("Checkout")) {
                 processCheckout(cmd);
             } else if(cmd.contains("Return")) {
@@ -45,7 +47,7 @@ public class Biblioteca {
 
     private void processCheckout(String cmd) {
         if(checkoutBook(getCheckoutTitle(cmd))) {
-            System.out.println("Thank you! Enjoy the book");
+            System.out.println("Thank you! Enjoy");
         } else {
             System.out.println("That book is not available");
         }
@@ -67,15 +69,19 @@ public class Biblioteca {
         return cmd.substring("Checkout ".length());
     }
 
-    public void list() {
-        System.out.println(l.listBooks());
+    void listBooks() {
+        System.out.println(l.list("book"));
     }
 
-    public boolean checkoutBook(String title) {
+    void listMovies() {
+        System.out.println(l.list("movie"));
+    }
+
+    boolean checkoutBook(String title) {
         return l.checkout(title);
     }
 
-    public boolean returnBook(String title) {
+    boolean returnBook(String title) {
         return l.returnBook(title);
     }
 }

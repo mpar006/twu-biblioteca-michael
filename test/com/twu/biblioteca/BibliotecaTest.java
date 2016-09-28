@@ -20,6 +20,7 @@ public class BibliotecaTest {
     String expectedBookList = "The Dispossessed,Ursula K Le Guin,1974\n" +
             "Perdido Street Station,China Mieville,2000\n" +
             "The Call of Cthulhu,HP Lovecraft,1926\n";
+    String expectedMovieList = "Sweeney Todd,2007,Tim Burton,7\nPulp Fiction,1994,Quentin Tarantino,9\n";
 
     @Before
     public void setUp() {
@@ -40,15 +41,22 @@ public class BibliotecaTest {
 
     @Test
     public void testBookDetails() {
-        b.list();
+        b.listBooks();
         assertEquals(expectedBookList, outContent.toString());
     }
 
     @Test
-    public void testListOption() {
+    public void testListBooksOption() {
         System.setIn(new ByteArrayInputStream("List Books".getBytes()));
         b.processCmds();
         assertEquals(expectedBookList, outContent.toString());
+    }
+
+    @Test
+    public void testListMoviesOption() {
+        System.setIn(new ByteArrayInputStream("List Movies".getBytes()));
+        b.processCmds();
+        assertEquals(expectedMovieList, outContent.toString());
     }
 
     @Test
@@ -68,9 +76,14 @@ public class BibliotecaTest {
     @Test
     public void testCheckoutBook() {
         b.checkoutBook("The Dispossessed");
-        b.list();
+        b.listBooks();
         assertEquals("Perdido Street Station,China Mieville,2000\n" +
                 "The Call of Cthulhu,HP Lovecraft,1926\n", outContent.toString ());
+    }
+
+    @Test
+    public void testCheckoutMovie() {
+
     }
 
     @Test
@@ -82,7 +95,7 @@ public class BibliotecaTest {
     public void testSuccessfulCheckout() {
         System.setIn(new ByteArrayInputStream("Checkout The Dispossessed".getBytes()));
         b.processCmds();
-        assertEquals("Thank you! Enjoy the book\n", outContent.toString());
+        assertEquals("Thank you! Enjoy\n", outContent.toString());
     }
 
     @Test
@@ -95,7 +108,7 @@ public class BibliotecaTest {
     @Test
     public void testReturnBook() {
         b.returnBook("The Dispossessed");
-        b.list();
+        b.listBooks();
         assertEquals(expectedBookList, outContent.toString());
     }
 
@@ -105,7 +118,7 @@ public class BibliotecaTest {
         b.processCmds();
         System.setIn(new ByteArrayInputStream("Return The Dispossessed".getBytes()));
         b.processCmds();
-        assertEquals("Thank you! Enjoy the book\nThank you for returning the book\n", outContent.toString());
+        assertEquals("Thank you! Enjoy\nThank you for returning the book\n", outContent.toString());
     }
 
     @Test
