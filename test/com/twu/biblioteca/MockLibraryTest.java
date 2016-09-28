@@ -62,4 +62,32 @@ public class MockLibraryTest {
         l.returnBook("The Call of Cthulhu");
         assertEquals(expected, l.list("book"));
     }
+
+    @Test
+    public void testUserLogin() {
+        assertTrue(l.login("111-1111", "pass"));
+    }
+
+    @Test
+    public void testFailUserLogin() {
+        assertFalse(l.login("111-1111", "foo"));
+    }
+
+    @Test
+    public void testUserIsLoggedIn() {
+        l.login("111-1111", "pass");
+        assertTrue(l.isLoggedIn());
+    }
+
+    @Test
+    public void testDoubleLoginFail() {
+        l.login("111-1111", "pass");
+        assertFalse(l.login("000-0000", "pass"));
+    }
+
+    @Test
+    public void testSuccessfulUserPrintDetails() {
+        l.login("111-1111", "pass");
+        assertEquals("Yvan,ymartin@thoughtworks.com,0434567524", l.printDetails());
+    }
 }
