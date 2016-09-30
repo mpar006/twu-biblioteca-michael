@@ -1,11 +1,10 @@
 package com.twu.biblioteca;
 
-import org.junit.After;
-import org.junit.Before;
 import org.junit.Test;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
+import java.io.OutputStream;
 import java.io.PrintStream;
 
 import static org.junit.Assert.*;
@@ -15,23 +14,12 @@ import static org.junit.Assert.*;
  */
 public class BibliotecaTest {
     private ByteArrayOutputStream outContent = new ByteArrayOutputStream();
-    Biblioteca b;
+    Biblioteca b = new Biblioteca(new InMemoryLibrary(), outContent);
     Library l;
     String expectedBookList = "The Dispossessed,Ursula K Le Guin,1974\n" +
             "Perdido Street Station,China Mieville,2000\n" +
             "The Call of Cthulhu,HP Lovecraft,1926\n";
     String expectedMovieList = "Sweeney Todd,2007,Tim Burton,7\nPulp Fiction,1994,Quentin Tarantino,9\n";
-
-    @Before
-    public void setUp() {
-        System.setOut(new PrintStream(outContent));
-        b = new Biblioteca(new MockLibrary());
-    }
-
-    @After
-    public void tearDown() {
-        System.setOut(null);
-    }
 
     @Test
     public void testWelcome() {

@@ -1,5 +1,7 @@
 package com.twu.biblioteca;
 
+import java.io.OutputStream;
+import java.io.PrintStream;
 import java.util.Scanner;
 
 /**
@@ -8,9 +10,12 @@ import java.util.Scanner;
 public class Biblioteca {
 
     private Library l;
+    private PrintStream out;
+    private Command c;
 
-    public Biblioteca(Library library) {
+    public Biblioteca(Library library, OutputStream outStream) {
         l = library;
+        out = new PrintStream(outStream);
     }
 
     public void start() {
@@ -19,7 +24,7 @@ public class Biblioteca {
     }
 
     public void welcome() {
-        System.out.println("Welcome to Biblioteca");
+        out.println("Welcome to Biblioteca");
     }
 
     public void processCmds() {
@@ -28,6 +33,9 @@ public class Biblioteca {
         String cmd;
         while(scanner.hasNext()) {
             cmd = scanner.next();
+//            if(cmd.contains("List Books")) {
+//                c.ListBooks.process();
+//            }
             if(cmd.contains("List Books")) {
                 listBooks();
             } else if(cmd.contains("List Movies")) {
@@ -41,10 +49,10 @@ public class Biblioteca {
             } else if(cmd.contains("Login")) {
                 processLogin(cmd);
             } else if(cmd.contains("Quit")) {
-                System.out.println("Goodbye!");
+                out.println("Goodbye!");
                 break;
             } else {
-                System.out.println("Select a valid option!");
+                out.println("Select a valid option!");
             }
         }
     }
@@ -52,9 +60,9 @@ public class Biblioteca {
     void processLogin(String cmd) {
         String[] args = cmd.split(" ");
         if(login(args[1], args[2])) {
-            System.out.println("Login successful");
+            out.println("Login successful");
         } else {
-            System.out.println("Login failure");
+            out.println("Login failure");
         }
     }
 
@@ -64,25 +72,25 @@ public class Biblioteca {
 
     private void processBookCheckout(String cmd) {
         if(checkoutBook(getSecondCmdArg(cmd, "Checkout book "))) {
-            System.out.println("Thank you! Enjoy");
+            out.println("Thank you! Enjoy");
         } else {
-            System.out.println("That book is not available");
+            out.println("That book is not available");
         }
     }
 
     private void processMovieCheckout(String cmd) {
         if(checkoutBook(getSecondCmdArg(cmd, "Checkout movie "))) {
-            System.out.println("Thank you! Enjoy");
+            out.println("Thank you! Enjoy");
         } else {
-            System.out.println("That movie is not available");
+            out.println("That movie is not available");
         }
     }
 
     private void processReturn(String cmd) {
         if(returnBook(getReturnTitle(cmd))) {
-            System.out.println("Thank you for returning the book");
+            out.println("Thank you for returning the book");
         } else {
-            System.out.println("That is not a valid book to return");
+            out.println("That is not a valid book to return");
         }
     }
 
@@ -99,11 +107,11 @@ public class Biblioteca {
     }
 
     void listBooks() {
-        System.out.println(l.list("book"));
+        out.println(l.list("book"));
     }
 
     void listMovies() {
-        System.out.println(l.list("movie"));
+        out.println(l.list("movie"));
     }
 
     boolean checkoutBook(String title) {

@@ -8,7 +8,7 @@ import java.util.Map;
 /**
  * Created by root on 26/09/16.
  */
-public class MockLibrary implements Library {
+public class InMemoryLibrary implements Library {
     // The boolean value corresponding to a particular key (book) is it's availability
     // LinkedHashMap is used to preserve iteration order
     private Map<LibraryItem, Boolean> bookInventory;
@@ -16,7 +16,7 @@ public class MockLibrary implements Library {
     private List<User> userList;
     private User loggedIn;
 
-    public MockLibrary() {
+    public InMemoryLibrary() {
         bookInventory = new LinkedHashMap<LibraryItem, Boolean>();
         bookInventory.put(new Book("The Dispossessed", "Ursula K Le Guin", 1974), true);
         bookInventory.put(new Book("Perdido Street Station", "China Mieville", 2000), true);

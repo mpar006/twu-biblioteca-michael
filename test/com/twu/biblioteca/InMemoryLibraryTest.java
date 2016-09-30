@@ -8,13 +8,13 @@ import static org.junit.Assert.*;
 /**
  * Created by root on 27/09/16.
  */
-public class MockLibraryTest {
+public class InMemoryLibraryTest {
 
-    MockLibrary l;
+    InMemoryLibrary l;
 
     @Before
     public void setUp() {
-        l = new MockLibrary();
+        l = new InMemoryLibrary();
     }
 
     @Test
