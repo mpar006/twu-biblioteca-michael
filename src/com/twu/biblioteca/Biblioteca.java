@@ -1,5 +1,6 @@
 package com.twu.biblioteca;
 
+import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.PrintStream;
 import java.util.Scanner;
@@ -11,11 +12,12 @@ public class Biblioteca {
 
     private Library l;
     private PrintStream out;
-    private Command c;
+    private InputStream in;
 
-    public Biblioteca(Library library, OutputStream outStream) {
+    public Biblioteca(Library library, OutputStream outStream, InputStream inputStream) {
         l = library;
         out = new PrintStream(outStream);
+        in = inputStream;
     }
 
     public void start() {
@@ -28,14 +30,12 @@ public class Biblioteca {
     }
 
     public void processCmds() {
-        Scanner scanner = new Scanner(System.in);
+        Scanner scanner = new Scanner(in);
         scanner.useDelimiter(System.getProperty("line.separator"));
         String cmd;
         while(scanner.hasNext()) {
             cmd = scanner.next();
-//            if(cmd.contains("List Books")) {
-//                c.ListBooks.process();
-//            }
+            //Command.valueOf("ListBooks").process();
             if(cmd.contains("List Books")) {
                 listBooks();
             } else if(cmd.contains("List Movies")) {
@@ -94,18 +94,6 @@ public class Biblioteca {
         }
     }
 
-    String getSecondCmdArg(String cmd, String firstArg) {
-        return cmd.substring(firstArg.length());
-    }
-
-    String getReturnTitle(String cmd) {
-        return cmd.substring("Return ".length());
-    }
-
-    String getCheckoutTitle(String cmd) {
-        return cmd.substring("Checkout ".length());
-    }
-
     void listBooks() {
         out.println(l.list("book"));
     }
@@ -124,5 +112,17 @@ public class Biblioteca {
 
     boolean returnBook(String title) {
         return l.returnBook(title);
+    }
+
+    String getSecondCmdArg(String cmd, String firstArg) {
+        return cmd.substring(firstArg.length());
+    }
+
+    String getReturnTitle(String cmd) {
+        return cmd.substring("Return ".length());
+    }
+
+    String getCheckoutTitle(String cmd) {
+        return cmd.substring("Checkout ".length());
     }
 }

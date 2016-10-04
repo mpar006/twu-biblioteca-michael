@@ -81,7 +81,6 @@ public class InMemoryLibrary implements Library {
                     return true;
                 }
             }
-            System.out.println("i'm here");
         }
         return false;
     }
