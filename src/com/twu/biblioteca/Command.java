@@ -1,39 +1,63 @@
 package com.twu.biblioteca;
 
+import java.io.PrintStream;
+
 public enum Command {
     ListBooks("List Books") {
-        public void process() {
-            System.out.println("books!");
+        public void process(PrintStream out, Library l, String args) {
+            out.println(l.list("book"));
         }
     },
     ListMovies("List Movies") {
-        public void process() {
-            System.out.println("movies!");
+        public void process(PrintStream out, Library l, String args) {
+            out.println(l.list("movie"));
         }
     },
     CheckoutBook("Checkout Book") {
-        public void process() {
-            System.out.println("checkout book");
+        public void process(PrintStream out, Library l, String args) {
+            if(l.checkout(args)) {
+                out.println("Thank you! Enjoy");
+            } else {
+                out.println("That book is not available");
+            }
         }
     },
     CheckoutMovie("Checkout Movie") {
-        public void process() {
-            System.out.println("checkout movie");
+        public void process(PrintStream out, Library l, String args) {
+            if(l.checkout(args)) {
+                out.println("Thank you! Enjoy");
+            } else {
+                out.println("That movie is not available");
+            }
         }
     },
-    Return("Return") {
-        public void process() {
-            System.out.println("return");
+    Return("Return Book") {
+        public void process(PrintStream out, Library l, String args) {
+            if(l.returnBook(args)) {
+                out.println("Thank you for returning the book");
+            } else {
+                out.println("That is not a valid book to return");
+            }
         }
     },
-    Login("Login") {
-        public void process() {
-            System.out.println("login");
+    UserLogin("User Login") {
+        public void process(PrintStream out, Library l, String args) {
+            String[] split = args.split(" ");
+            if(l.login(split[0], split[1])) {
+                out.println("Login successful");
+            } else {
+                out.println("Login failure");
+            }
         }
     },
-    Quit("Quit") {
-        public void process() {
-            System.out.println("quit");
+    Quit("Quit Biblioteca") {
+        public void process(PrintStream out, Library l, String args) {
+            out.println("Goodbye!");
+        }
+    },
+    Default("") {
+        public void process(PrintStream out, Library l, String args) {
+            out.println("Select a valid option!");
         }
     };
 
@@ -52,14 +76,14 @@ public enum Command {
         return input;
     }
 
-    public Command retrieveByInput(String input) {
+    public static Command retrieveByInput(String input) {
         for(Command c : Command.values()) {
             if(c.getInput().equals(input)) {
                 return c;
             }
         }
-        return null;
+        return Default;
     }
 
-    abstract public void process();
+    abstract public void process(PrintStream out, Library l, String args);
 }
